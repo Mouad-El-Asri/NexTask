@@ -1,0 +1,11 @@
+services:
+  frontend:
+    image: nextask-frontend:latest
+    container_name: nextask-frontend-app
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    environment:
+      NODE_ENV: production
+    ports:
+      - 3000:3000
