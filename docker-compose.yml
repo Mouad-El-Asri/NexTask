@@ -8,4 +8,46 @@ services:
     environment:
       NODE_ENV: production
     ports:
-      - 3000:3000
+      - "3000:3000"
+
+  mysql:
+    image: mysql:8.0
+    container_name: nextask-mysql-db
+    environment:
+      MYSQL_ROOT_PASSWORD: rootPwd123
+      MYSQL_DATABASE: NexTaskDb
+      MYSQL_USER: nexTaskUser
+      MYSQL_PASSWORD: nexTaskUserPwd123
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  flyway:
+    image: flyway/flyway:latest
+    container_name: nextask-flyway
+    command: >
+      -url=jdbc:mysql://mysql:3306/NexTaskDb
+      -user=nexTaskUser
+      -password=nexTaskUserPwd123
+      -locations=filesystem:/flyway/sql
+      migrate
+    depends_on:
+      - mysql
+    volumes:
+      - ./database/migrations:/flyway/sql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: pma
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: nexTaskUser
+      PMA_PASSWORD: nexTaskUserPwd123
+    ports:
+      - "8080:80"
+    depends_on:
+      - mysql
+
+volumes:
+  mysql_data:
