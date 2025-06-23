@@ -6,7 +6,7 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     environment:
-      NODE_ENV: production
+      NODE_ENV: ${NODE_ENV}
     ports:
       - "3000:3000"
 
@@ -14,10 +14,10 @@ services:
     image: mysql:8.0
     container_name: nextask-mysql-db
     environment:
-      MYSQL_ROOT_PASSWORD: rootPwd123
-      MYSQL_DATABASE: NexTaskDb
-      MYSQL_USER: nexTaskUser
-      MYSQL_PASSWORD: nexTaskUserPwd123
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     ports:
       - "3306:3306"
     volumes:
@@ -27,9 +27,9 @@ services:
     image: flyway/flyway:latest
     container_name: nextask-flyway
     command: >
-      -url=jdbc:mysql://mysql:3306/NexTaskDb
-      -user=nexTaskUser
-      -password=nexTaskUserPwd123
+      -url=jdbc:mysql://mysql:3306/${MYSQL_DATABASE}
+      -user=${MYSQL_USER}
+      -password=${MYSQL_PASSWORD}
       -locations=filesystem:/flyway/sql
       migrate
     depends_on:
@@ -42,8 +42,8 @@ services:
     container_name: pma
     environment:
       PMA_HOST: mysql
-      PMA_USER: nexTaskUser
-      PMA_PASSWORD: nexTaskUserPwd123
+      PMA_USER: ${MYSQL_USER}
+      PMA_PASSWORD: ${MYSQL_PASSWORD}
     ports:
       - "8080:80"
     depends_on:
