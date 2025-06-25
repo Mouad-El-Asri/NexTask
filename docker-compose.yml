@@ -26,14 +26,10 @@ services:
   flyway:
     image: flyway/flyway:latest
     container_name: nextask-flyway
-    command: >
-      -url=jdbc:mysql://mysql:3306/${MYSQL_DATABASE}
-      -user=${MYSQL_USER}
-      -password=${MYSQL_PASSWORD}
-      -locations=filesystem:/flyway/sql
-      migrate
+    entrypoint: ["/bin/bash", "-c", "flyway -url=\"jdbc:mysql://mysql:3306/${MYSQL_DATABASE}?allowPublicKeyRetrieval=true&useSSL=false\" -user=\"${MYSQL_USER}\" -password=\"${MYSQL_PASSWORD}\" -locations=filesystem:/flyway/sql migrate"]
     depends_on:
       - mysql
+    restart: on-failure
     volumes:
       - ./database/migrations:/flyway/sql
 

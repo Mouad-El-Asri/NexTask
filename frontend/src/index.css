@@ -1,3 +1,8 @@
+@import "tailwindcss";
+@plugin "daisyui" {
+    themes: light --default, dark --prefersdark, nord;
+}
+
 *,
 *::before,
 *::after {
@@ -5,7 +10,7 @@
 }
 
 html {
-	scroll-behavior: smooth;
+    scroll-behavior: smooth;
 }
 
 :focus {
@@ -26,4 +31,8 @@ html {
 
 ::-webkit-scrollbar-thumb:hover {
     background: #353535;
+}
+
+body {
+    font-family: "Nunito", sans-serif;
 }
